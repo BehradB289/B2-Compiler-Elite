@@ -58,7 +58,7 @@ To execute continuous autonomous loops without exhausting your API quotas, Behra
 Ensure you have Python 3.9+ installed on your deployment server.
 
 1. Clone the repository and navigate into the directory:
-git clone [https://github.com/BehradB289/BehradB2-AutoScientist.git](https://github.com/YourUsername/BehradB2-AutoScientist.git)
+git clone [https://github.com/BehradB289/BehradB2-AutoScientist.git](https://github.com/BehradB289/BehradB2-AutoScientist.git)
 cd BehradB2-AutoScientist
 
 2. Create and activate a Python virtual environment:
