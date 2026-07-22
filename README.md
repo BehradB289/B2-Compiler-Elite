@@ -1,14 +1,70 @@
-🚀 BehradB2 Autonomous Compiler & Fallback Router📖 Project OverviewThe BehradB2 Autonomous Compiler (codenamed B2-Compiler-Elite) is an advanced, high-performance proxy server designed to orchestrate Large Language Model (LLM) requests. Engineered specifically for environments that demand absolute reliability and zero downtime, it functions as a "cascading fallback router."When developing AI-driven applications or autonomous coding agents, relying on a single API endpoint often leads to critical failures due to rate limits, network timeouts, or upstream server errors. This system solves that problem. If a primary AI model experiences any disruption, the routing engine automatically catches the failure and seamlessly reroutes the prompt to the next available elite model in a pre-defined cascade stack, returning the output without the end-user or client application ever noticing the interruption.✨ Core Mechanics and FeaturesBuilt on top of the asynchronous FastAPI framework and utilizing LiteLLM for universal provider translation, this project creates a highly resilient, OpenAI-compatible endpoint. The architecture operates through two primary execution paths:The Cascade Fallback Engine: Triggered when a request targets the virtual b2-compiler-elite model. The engine attempts to process the prompt through a sequence of 5 elite tier models, enforcing a strict 20-second timeout per attempt to prevent process hanging.Direct Passthrough Mode: For standard requests targeting specific models, the system intelligently prepends required prefixes and routes the request directly to the local upstream proxy.Additionally, the system features a custom safe_stream_generator that meticulously handles Server-Sent Events (SSE). It securely streams token chunks back to the client in real-time, catching any mid-stream interruptions and outputting clean JSON error packets to prevent socket deadlocks.🧠 The Fallback Matrix ArchitectureThe cascade is intentionally structured to balance supreme reasoning capabilities with ultra-low latency fallback options:Priority LayerTarget ModelUpstream Provider Identity1 (Primary)DeepSeek V4 Pronvidia/deepseek-ai/deepseek-v4-pro2 (Secondary)Claude 3.5 Sonnetanthropic/claude-3-5-sonnet-202410223 (Tertiary)Qwen 2.5 Coder 32Bcloudflare/@cf/qwen/qwen2.5-coder-32b-instruct4 (Quaternary)Gemini 1.5 Progemini/gemini-1.5-pro5 (Terminal)Llama 3.3 70Bgroq/llama-3.3-70b-versatile🛠 Installation GuideEnsure you have Python 3.9+ installed on your deployment server.Clone the repository and navigate into the directory:Bashgit clone https://github.com/YourUsername/ProjectName.git
+# 🚀 BehradB2 Autonomous Compiler & Fallback Router
+
+## 📖 Project Overview
+The BehradB2 Autonomous Compiler (codenamed B2-Compiler-Elite) is an advanced, high-performance proxy server designed to orchestrate Large Language Model (LLM) requests. Engineered specifically for environments that demand absolute reliability and zero downtime, it functions as a "cascading fallback router."
+
+When developing AI-driven applications or autonomous coding agents, relying on a single API endpoint often leads to critical failures due to rate limits, network timeouts, or upstream server errors. This system solves that problem. If a primary AI model experiences any disruption, the routing engine automatically catches the failure and seamlessly reroutes the prompt to the next available elite model in a pre-defined cascade stack, returning the output without the end-user or client application ever noticing the interruption.
+
+## ✨ Core Mechanics and Features
+Built on top of the asynchronous FastAPI framework and utilizing LiteLLM for universal provider translation, this project creates a highly resilient, OpenAI-compatible endpoint. The architecture operates through two primary execution paths:
+
+* **The Cascade Fallback Engine:** Triggered when a request targets the virtual `b2-compiler-elite` model. The engine attempts to process the prompt through a sequence of 5 elite tier models, enforcing a strict 20-second timeout per attempt to prevent process hanging.
+* **Direct Passthrough Mode:** For standard requests targeting specific models, the system intelligently prepends required prefixes and routes the request directly to the local upstream proxy.
+
+Additionally, the system features a custom `safe_stream_generator` that meticulously handles Server-Sent Events (SSE). It securely streams token chunks back to the client in real-time, catching any mid-stream interruptions and outputting clean JSON error packets to prevent socket deadlocks.
+
+## 🧠 The Fallback Matrix Architecture
+The cascade is intentionally structured to balance supreme reasoning capabilities with ultra-low latency fallback options:
+
+| Priority Layer | Target Model | Upstream Provider Identity |
+| :--- | :--- | :--- |
+| **1 (Primary)** | DeepSeek V4 Pro | `nvidia/deepseek-ai/deepseek-v4-pro` |
+| **2 (Secondary)** | Claude 3.5 Sonnet | `anthropic/claude-3-5-sonnet-20241022` |
+| **3 (Tertiary)** | Qwen 2.5 Coder 32B | `cloudflare/@cf/qwen/qwen2.5-coder-32b-instruct` |
+| **4 (Quaternary)**| Gemini 1.5 Pro | `gemini/gemini-1.5-pro` |
+| **5 (Terminal)** | Llama 3.3 70B | `groq/llama-3.3-70b-versatile` |
+
+## 🛠 Installation Guide
+Ensure you have Python 3.9+ installed on your deployment server.
+
+1. Clone the repository and navigate into the directory:
+```bash
+git clone [https://github.com/YourUsername/ProjectName.git](https://github.com/YourUsername/ProjectName.git)
 cd ProjectName
-Create and activate a Python virtual environment:Bashpython -m venv venv
+```
+
+2. Create and activate a Python virtual environment:
+```bash
+python -m venv venv
 source venv/bin/activate  # On Windows use: venv\Scripts\activate
-Install all required dependencies:Bashpip install -r requirements.txt
-Configure your API authorization credentials (see Security section).🚀 Usage InstructionsTo initialize the autonomous compiler, simply run the core Python script:Bashpython B2-Compiler-Elite.py
-The server will initialize on port 20129, display a custom ANSI-styled diagnostic banner, and actively listen for incoming REST API requests.Integration with Aider (Autonomous AI Coding Agent)To utilize the fallback resilience of this compiler within aider, execute the following command in your terminal:Bashaider --openai \
+```
+
+3. Install all required dependencies:
+```bash
+pip install -r requirements.txt
+```
+*Configure your API authorization credentials (see Security section).*
+
+## 🚀 Usage Instructions
+To initialize the autonomous compiler, simply run the core Python script:
+```bash
+python B2-Compiler-Elite.py
+```
+The server will initialize on port `20129`, display a custom ANSI-styled diagnostic banner, and actively listen for incoming REST API requests.
+
+### Integration with Aider (Autonomous AI Coding Agent)
+To utilize the fallback resilience of this compiler within aider, execute the following command in your terminal:
+```bash
+aider --openai \
       --openai-api-base http://localhost:20129/v1 \
       --openai-api-key sk-33c30ed152582727-i4wntx-55470e71 \
       --model B2-Compiler-Elite
-Standard REST API Request (with Streaming)You can interface directly with the compiler using standard HTTP clients like cURL. To receive the response in real-time chunks, set "stream": true:Bashcurl -X POST http://localhost:20129/v1/chat/completions \
+```
+
+### Standard REST API Request (with Streaming)
+You can interface directly with the compiler using standard HTTP clients like cURL. To receive the response in real-time chunks, set `"stream": true`:
+```bash
+curl -X POST http://localhost:20129/v1/chat/completions \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer sk-33c30ed152582727-i4wntx-55470e71" \
   -d '{
@@ -18,4 +74,10 @@ Standard REST API Request (with Streaming)You can interface directly with the co
     ],
     "stream": true
   }'
-📊 Terminal User Interface (Observability)To assist developers in monitoring the system without relying on complex external logging stacks, the system includes a custom TUI built directly into the standard output. It suppresses noisy background logs and highlights critical metrics: prompt summaries in cyan, successful token streams and execution times in green, routing transitions in yellow, and critical security or timeout failures in bold red.🤝 ContributingWe welcome community contributions. Whether it's adding new models to the fallback matrix, enhancing streaming throughput, or strengthening security protocols, please feel free to fork the repository, commit your updates to a new branch, and submit a Pull Request for review.
+```
+
+## 📊 Terminal User Interface (Observability)
+To assist developers in monitoring the system without relying on complex external logging stacks, the system includes a custom TUI built directly into the standard output. It suppresses noisy background logs and highlights critical metrics: prompt summaries in cyan, successful token streams and execution times in green, routing transitions in yellow, and critical security or timeout failures in bold red.
+
+## 🤝 Contributing
+We welcome community contributions. Whether it's adding new models to the fallback matrix, enhancing streaming throughput, or strengthening security protocols, please feel free to fork the repository, commit your updates to a new branch, and submit a Pull Request for review.
