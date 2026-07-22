@@ -58,7 +58,7 @@
 اطمینان حاصل کنید که پایتون نسخه 3.9 یا بالاتر بر روی سرور یا سیستم شما نصب شده است.
 
 ۱. مخزن را کلون کرده و وارد پوشه پروژه شوید:
-git clone https://github.com/YourUsername/BehradB2-AutoScientist.git
+git clone https://github.com/BehradB289/BehradB2-AutoScientist.git
 cd BehradB2-AutoScientist
 
 ۲. یک محیط مجازی پایتون (Virtual Environment) ایجاد و فعال کنید:
